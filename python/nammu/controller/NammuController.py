@@ -383,6 +383,66 @@ class NammuController(object):
     def paste(self, event=None):
         self.atfAreaController.paste()
 
+    # Set up the harvest and merge commands.
+    # Here, when clicked, the user will be prompted to login using
+    # their username(the project name) and password
+    # Once that happens, we'll pass the proper stuff through to the modified
+    # SOAP client
+    # NOTE - NEED TO FIND WAY TO CHANGE DEFAULT TITLE FOR THESE PANES
+
+    def harvest(self, event=None):
+        print("HARVEST")
+        username = JOptionPane.showInputDialog(
+                            None,
+                            "Please Put In Your Username")
+        password = JOptionPane.showInputDialog(
+                            None,
+                            "Please Put In Your Password")
+        if self.currentFilename:
+            self.logger.debug("Harvesting %s.", self.currentFilename)
+
+            # Search for project name in file. If not found, don't validate
+            project = self.get_project()
+
+            if project:
+                self.send_command("har", project, username, password)
+            else:
+                # TODO: Prompt dialog.
+                self.logger.error(
+                                "No project found in file %s. "
+                                "Add project and retry.",
+                                self.currentFilename)
+
+            self.logger.debug("Harvesting done.")
+        else:
+            self.logger.error("Please save file before trying to harvest.")
+
+    def merge(self, event=None):
+        username = JOptionPane.showInputDialog(
+                            None,
+                            "Please Put In Your Username")
+        password = JOptionPane.showInputDialog(
+                            None,
+                            "Please Put In Your Password")
+        if self.currentFilename:
+            self.logger.debug("Merging %s.", self.currentFilename)
+
+            # Search for project name in file. If not found, don't validate
+            project = self.get_project()
+
+            if project:
+                self.send_command("mer", project, username, password)
+            else:
+                # TODO: Prompt dialog.
+                self.logger.error(
+                                "No project found in file %s. "
+                                "Add project and retry.",
+                                self.currentFilename)
+
+            self.logger.debug("Merging done.")
+        else:
+            self.logger.error("Please save file before trying to merge.")
+
     def validate(self, event=None):
         '''
         For now, we are validating using the SOAP webservices from ORACC
@@ -450,7 +510,8 @@ class NammuController(object):
         else:
             self.logger.error("Please save file before trying to lemmatise.")
 
-    def send_command(self, command, project):
+    # Just modify the send_command
+    def send_command(self, command, project, user=None, password=None):
         '''
         Both validation and atf validation work similarly, same for other
         services.
@@ -465,7 +526,7 @@ class NammuController(object):
         url_dir = self.config['servers'][server]['dir']
 
         # Create HTTP client and prepare all input arguments for request
-        client = SOAPClient(url, port, url_dir, method='POST')
+        client = SOAPClient(url, port, url_dir, 'POST', user, password)
 
         atf_basename = os.path.basename(self.currentFilename)
         nammu_text = self.atfAreaController.getAtfAreaText()
