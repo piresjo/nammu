@@ -37,11 +37,13 @@ class SOAPClient(object):
     """
     Sends and retrieves information to and from the ORACC SOAP server.
     """
-    def __init__(self, url, port, url_dir, method):
+    def __init__(self, url, port, url_dir, method, user=None, password=None):
         self.url = url
         self.port = port
         self.url_dir = url_dir
         self.method = method
+        self.user = user
+        self.password = password
         # TODO: Create logger in this module that reuses nammu controller's
         # logger configuration so output is in same file, but tells us it was
         # produced in this module.
