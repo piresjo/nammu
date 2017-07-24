@@ -538,7 +538,9 @@ class NammuController(object):
         client.create_request(command=command,
                               keys=[project, '00atf/' + atf_basename],
                               atf_basename=atf_basename,
-                              atf_text=nammu_text.encode('utf-8'))
+                              atf_text=nammu_text.encode('utf-8'),
+                              username = user,
+                              password = password)
 
         try:
             self.send_request(client)
