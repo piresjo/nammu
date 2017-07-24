@@ -35,13 +35,23 @@ class HTTPRequest(object):
         self.url = url
         if method == 'POST':
             if 'command' in kwargs.keys():
-                self.create_request_message(kwargs['command'], kwargs['keys'],
-                                            kwargs['atf_basename'],
-                                            kwargs['atf_text'])
+            	if 'username' in kwargs:
+            		self.create_request_message(kwargs['command'], kwargs['keys'],
+                    	                        kwargs['atf_basename'],
+                        	                    kwargs['atf_text'],
+                            	                kwargs['username'],
+                                	            kwargs['password'])
+            	else:
+                	self.create_request_message(kwargs['command'], kwargs['keys'],
+                    	                        kwargs['atf_basename'],
+                        	                    kwargs['atf_text'])
             else:
-                self.create_response_message(kwargs['keys'])
+            	if 'username' in kwargs:
+                	self.create_response_message(kwargs['keys'], kwargs['username'], kwargs['password'])
+                else:
+                	self.create_response_message(kwargs['keys'])
 
-    def create_request_message(self, command, keys, atf_basename, atf_text):
+    def create_request_message(self, command, keys, atf_basename, atf_text, username=None, password=None):
         """
         Send attachment to server containing ATF file and necessary data to
         run given command (validate, lemmatise, etc).
@@ -51,7 +61,9 @@ class HTTPRequest(object):
         self.set_soap_envelope(command=command,
                                keys=keys,
                                atf_basename=atf_basename,
-                               atf_text=atf_text)
+                               atf_text=atf_text,
+                               username=username,
+                               password=password)
         self.rootpkg = MIMEApplication(self.envelope,
                                        'xop+xml',
                                        encode_7or8bit)
@@ -63,12 +75,12 @@ class HTTPRequest(object):
         # need it to populate the Content-Length header
         self.set_multipart_headers()
 
-    def create_response_message(self, keys):
+    def create_response_message(self, keys, username=None, password=None):
         """
         Asks the server for the response request.zip attachment containing
         validated/lemmatised/etc ATF file.
         """
-        self.set_soap_envelope(keys=keys)
+        self.set_soap_envelope(keys=keys, username=username, password=password)
         self.mtompkg = MIMEApplication(self.envelope,
                                        'soap+xml',
                                        encode_7or8bit)
