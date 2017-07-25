@@ -36,7 +36,9 @@ class HTTPRequest(object):
         if method == 'POST':
             if 'command' in kwargs.keys():
             	if 'username' in kwargs:
-            		self.create_request_message(kwargs['command'], kwargs['keys'],
+                    #print(kwargs['username'])
+                    #print(kwargs['password'])
+                    self.create_request_message(kwargs['command'], kwargs['keys'],
                     	                        kwargs['atf_basename'],
                         	                    kwargs['atf_text'],
                             	                kwargs['username'],
@@ -158,6 +160,10 @@ class HTTPRequest(object):
         # it in both cases.
         data = ''
 
+        #print("")
+        #print(kwargs)
+        #print("")
+
         if 'command' in kwargs.keys():
             keys += '<osc-data:key>{}</osc-data:key>'.format(kwargs['command'])
             message_type = 'Request'
@@ -171,6 +177,14 @@ class HTTPRequest(object):
 
         for key in kwargs['keys']:
             keys += '<osc-data:key>{}</osc-data:key>'.format(key)
+
+        if 'username' in kwargs:
+            if kwargs['username'] is not None:
+                keys += '<osc-data:key>{}</osc-data:key>'.format(kwargs['username'])
+
+        if 'password' in kwargs:
+            if kwargs['password'] is not None:
+                keys += '<osc-data:key>{}</osc-data:key>'.format(kwargs['password'])
 
         envelope = """<?xml version="1.0" encoding="UTF-8"?>
             <SOAP-ENV:Envelope
@@ -193,6 +207,12 @@ class HTTPRequest(object):
             </SOAP-ENV:Envelope>""".format(type=message_type,
                                            keys=keys,
                                            data=data)
+
+        #print("")
+        #print("ENVELOPE")
+        #print(envelope)
+        #print("ENVELOPE")
+        #print("")
         self.envelope = envelope
 
     def get_soap_envelope(self):

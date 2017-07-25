@@ -48,8 +48,12 @@ class SOAPClient(object):
         # logger configuration so output is in same file, but tells us it was
         # produced in this module.
         self.logger, self.request_log = self.setup_logger()
+        #print(self.user)
+        #print(self.password)
 
     def create_request(self, **kwargs):
+        #print("A")
+        #print(kwargs)
         url = "{}:{}".format(self.url, self.port)
         request = HTTPRequest(url, self.method, **kwargs)
         self.request = request
