@@ -1,18 +1,14 @@
 '''
 Copyright 2015 - 2017 University College London.
-
 This file is part of Nammu.
-
 Nammu is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
 Nammu is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with Nammu.  If not, see <http://www.gnu.org/licenses/>.
 '''
@@ -22,7 +18,8 @@ from .Menu import Menu
 from javax.swing import JMenuBar
 from java.awt.event import KeyEvent
 
-
+# I think this is where I add the graphical features for the Lemmatize
+# and Validate
 class MenuView(JMenuBar):
     '''
     Initializes the menu view and sets its layout.
@@ -48,6 +45,7 @@ class MenuView(JMenuBar):
         menus['ATF'] = KeyEvent.VK_A
         menus['Window'] = KeyEvent.VK_W
         menus['Help'] = KeyEvent.VK_H
+        menus['SSH'] = KeyEvent.VK_0
 
         menuItems = {}
 
@@ -75,6 +73,8 @@ class MenuView(JMenuBar):
         menuItems["ATF"] = collections.OrderedDict()
         menuItems["ATF"]["Validate"] = [KeyEvent.VK_D, "validate"]
         menuItems["ATF"]["Lemmatise"] = [KeyEvent.VK_L, "lemmatise"]
+        menuItems["ATF"]["Harvest"] = [KeyEvent.VK_3, "harvest"]
+        menuItems["ATF"]["Merge"] = [KeyEvent.VK_4, "merge"]
 
         menuItems["Window"] = {}
         menuItems["Window"] = collections.OrderedDict()
@@ -97,12 +97,18 @@ class MenuView(JMenuBar):
         menuItems["Help"]["Help"] = [KeyEvent.VK_H, "showHelp"]
         menuItems["Help"]["About"] = [KeyEvent.VK_A, "showAbout"]
 
+        menuItems["SSH"] = {}
+        menuItems["SSH"] = collections.OrderedDict()
+        menuItems["SSH"]["Open SSH Tunnel"] = [KeyEvent.VK_1, "openTunnel"]
+        menuItems["SSH"]["Close SSH Tunnel"] = [KeyEvent.VK_2, "closeTunnel"]
+
         # Menu Items after which there is a menu separator
         separators = {"File": ["Close", "Print"],
                       "Edit": ["Redo", "Paste", "Find/Replace"],
                       "ATF": [],
                       "Window": ["Display Model View"],
-                      "Help": ["Help"]}
+                      "Help": ["Help"],
+                      "SSH": ["Open SSH Tunnel", "Close SSH Tunnel"]}
 
         # Create menu items and add to menu bar
         for menuName, keyEvent in menus.items():

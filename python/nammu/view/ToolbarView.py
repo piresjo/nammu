@@ -1,18 +1,14 @@
 '''
 Copyright 2015 - 2017 University College London.
-
 This file is part of Nammu.
-
 Nammu is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
 Nammu is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with Nammu.  If not, see <http://www.gnu.org/licenses/>.
 '''
@@ -54,9 +50,17 @@ class ToolbarView(JToolBar):
         tooltips['copy'] = 'Copy text selection'
         tooltips['cut'] = 'Cut text selection'
         tooltips['paste'] = 'Paste clipboard content'
+        # Add buttons for opening and closing ssh tunnels
+        tooltips['openTunnel'] = 'Open SSH tunnel for various functions'
+        tooltips['closeTunnel'] = 'Close the SSH tunnel'
+        # JP
         tooltips['syntax_highlight_switch'] = 'Switch on/off syntax_highlight'
         tooltips['validate'] = 'Check current ATF correctness'
         tooltips['lemmatise'] = 'Obtain lemmas for current ATF text'
+        # Add buttons for merge, lemmatize, open ssh tunnel, and close ssh tunnel
+        tooltips['harvest'] = 'Harvest new words from text'
+        tooltips['merge'] = 'Redoes harvest and then merge to main glossary'
+        # JP
         tooltips['displayModelView'] = 'Change to ATF data model view'
         tooltips['editSettings'] = 'Change Nammu settings'
         tooltips['showHelp'] = 'Displays ATF documentation'
