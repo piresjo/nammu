@@ -391,7 +391,6 @@ class NammuController(object):
     # NOTE - NEED TO FIND WAY TO CHANGE DEFAULT TITLE FOR THESE PANES
 
     def harvest(self, event=None):
-        print("HARVEST")
         username = JOptionPane.showInputDialog(
                             None,
                             "Please Put In Your Username")
@@ -539,8 +538,8 @@ class NammuController(object):
                               keys=[project, '00atf/' + atf_basename],
                               atf_basename=atf_basename,
                               atf_text=nammu_text.encode('utf-8'),
-                              username = user,
-                              password = password)
+                              username=user,
+                              password=password)
 
         try:
             self.send_request(client)
