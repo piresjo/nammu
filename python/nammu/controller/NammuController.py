@@ -25,6 +25,7 @@ from logging.handlers import RotatingFileHandler
 import os
 import urllib
 import re
+import hashlib
 
 from AtfAreaController import AtfAreaController
 from ConsoleController import ConsoleController
@@ -383,12 +384,20 @@ class NammuController(object):
     def paste(self, event=None):
         self.atfAreaController.paste()
 
+  	# Generate the hashed digest, using username, server, and password
+  	# This probably won't be used.
+  	def generateDigest(self, user, password):
+  		hashVal = hashlib.sha224()
+  		hashVal.update(user)
+  		hashVal.update("130.91.80.31")
+  		hashVal.update(password)
+  		return hashVal.hexdigest()
+
     # Set up the harvest and merge commands.
     # Here, when clicked, the user will be prompted to login using
     # their username(the project name) and password
     # Once that happens, we'll pass the proper stuff through to the modified
     # SOAP client
-    # NOTE - NEED TO FIND WAY TO CHANGE DEFAULT TITLE FOR THESE PANES
 
     def harvest(self, event=None):
         username = JOptionPane.showInputDialog(
@@ -397,6 +406,8 @@ class NammuController(object):
         password = JOptionPane.showInputDialog(
                             None,
                             "Please Put In Your Password")
+
+        hashedInput = self.generateDigest(username, password)
         if self.currentFilename:
             self.logger.debug("Harvesting %s.", self.currentFilename)
 
@@ -404,7 +415,7 @@ class NammuController(object):
             project = self.get_project()
 
             if project:
-                self.send_command("har", project, username, password)
+                self.send_command("har", project, username, hashedInput)
             else:
                 # TODO: Prompt dialog.
                 self.logger.error(
@@ -423,6 +434,7 @@ class NammuController(object):
         password = JOptionPane.showInputDialog(
                             None,
                             "Please Put In Your Password")
+        hashedInput = self.generateDigest(username, password)
         if self.currentFilename:
             self.logger.debug("Merging %s.", self.currentFilename)
 
@@ -430,7 +442,7 @@ class NammuController(object):
             project = self.get_project()
 
             if project:
-                self.send_command("mer", project, username, password)
+                self.send_command("mer", project, username, hashedInput)
             else:
                 # TODO: Prompt dialog.
                 self.logger.error(
